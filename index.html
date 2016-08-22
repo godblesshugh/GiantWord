@@ -100,12 +100,14 @@
                             <canvas id="tempCanvas" height="988px" width="3000px" style="display:none;"></canvas>
                         </div>
                     </div>
-                               <div style="text-align:center; margin-top:-65px;">
-                <div style="display: inline-block;">
-                    <img src="img/logo.png" width="38" height="38" style="margin-bottom:-10px;float:left;">
-                    <span style="color:#999;margin-left:10px;float:left;">“表情帝bb” <br> <span style="margin-left:-6px">良心出品</span></span>
+                    <div style="text-align:center; margin-top:-65px;">
+                        <div style="display: inline-block;">
+                            <img src="img/logo.png" width="38" height="38" style="margin-bottom:-10px;float:left;">
+                            <span style="color:#999;margin-left:10px;float:left;">“表情帝bb” <br> <span style="margin-left:-6px">良心出品</span></span>
+                        </div>
                     </div>
-            </div>
+                    <img src="./img/shareImg.jpg" style="display:none;">
+                    <img src="./img/daziQRCode.png" id="QRCode" style="display:none;">
                 </div>
             </div>
         </div>
@@ -179,6 +181,7 @@
             var overlay = $('#overlay');
             var duration = 150;
             var save_img = document.getElementById("save_faceImg");
+            save_img.width = screenWidth * 0.8
             var save_img_container = document.getElementById("save_img_container");
             if (overlay.css('visibility') == 'visible') {
                 overlay.fadeTo(duration, 0, function () {
@@ -187,7 +190,6 @@
             } else {
                 overlay.fadeTo(duration, 1).css({ visibility: "visible" });
             }
-
             // Height
             save_img_container.style.height = save_img.height + "px";
             save_img_container.style["margin-top"] = (screenHeight - save_img_container.style.height.split("px")[0]) / 3 + "px"

@@ -36,7 +36,7 @@ function strToImg(strElement, imgElement, canvasElement, fontColor, callback){
     context.fillStyle='#FFFFFF';
     context.fillRect(0,0,canvas.width,canvas.height);
     context.restore()
-
+    context.drawImage(document.getElementById("QRCode"), 0, 903, 85, 85)
     context.fillStyle = fontColor;
     context.font = lineFont[fontIndex][1] + "px Courier New"
     for (var i = 0; i < strList.length; i++) {
@@ -44,7 +44,6 @@ function strToImg(strElement, imgElement, canvasElement, fontColor, callback){
     }
     var save_img = document.getElementById(imgElement)
     save_img.src = canvas.toDataURL("image/gif")
-    save_img.width = screenWidth * 0.8
     save_img.onload = function(){
         callback()
     }
