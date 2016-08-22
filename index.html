@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>彩色大字</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://cdn.staticfile.org/framework7/1.4.0/css/framework7.ios.min.css">
+    <link rel="stylesheet" href="http://cdn.staticfile.org/framework7/1.4.0/css/framework7.material.colors.min.css">
+    <link rel="stylesheet" href="./css/my-app.css">
+    <script type="text/javascript" src="http://cdn.staticfile.org/es6-promise/3.0.2/es6-promise.min.js" /></script>
+    <style type="text/css">
+        * {
+            -webkit-touch-callout:inherit;
+            -webkit-tap-highlight-color:inherit;
+        }
+    </style>
+    <style type="text/css">
+        .colorPick {
+            border-radius: 5px;
+            text-indent: -9999px;
+        }
+        .colorPickChoose {
+            /*border-radius: 10px;*/
+            color: #d1cdcd;
+            text-indent: 0px;
+            text-align: center;
+            line-height: 27px;
+        }
+    </style>
+    <div id='wx_pic' style='margin:0 auto;display:none;'>
+        <img id="shareImg" />
+    </div>
+  </head>
+  <body>
+    <!-- Status bar overlay for full screen mode (PhoneGap) -->
+    <div class="statusbar-overlay"></div>
+    <!-- Views -->
+    <div class="views">
+      <!-- Your main view, should have "view-main" class -->
+        <div class="view view-main">
+            <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
+            <div class="pages main_page">
+              <!-- Page, "data-page" contains page name -->
+                <div data-page="index" class="page">
+                <!-- Scrollable page content -->
+                    <div class="page-content">
+                        <div class="content-block inset" style="margin-top:15px; padding:0px;">
+                            <div>
+                                <div class="row" style="text-align:center;background:none;">
+                                    <div class="col-100">
+                                        <textarea style="width:95%;height:80px;" id="textContent" placeholder="在这里输入文字，不能超过36字"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row" style="text-align:center;background:none;width:95%;">
+                                    <div class="col-30" style="margin-right: -20px;">
+                                        <p>字体颜色：</p>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick colorPickChoose" style="background:no-repeat #000000;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #fe0000;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #ffff00;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #00ff01;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #00ffff;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #0001fe;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                    <div class="col-10">
+                                        <div class="colorPick" style="background:no-repeat #ff00fe;width:27px;height:27px;margin-top:10px;">√</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row">
+                                    <div class="col-100">
+                                        <a href='#' class="button button-fill button-big color-black" style="max-width:95%;margin:auto;" onclick='create();return;'>生成图片</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <canvas id="tempCanvas" height="988px" width="3000px" style="display:none;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal HTML embedded directly into document -->
+    <div id="overlay">
+     <div id="overlay_container">
+        <div id="save_img_container" style="">
+            <img id="save_faceImg">
+        </div>
+        <p style="text-align:center; color:red;font-size:20px;"><strong>* 长按图片保存到相册 *</strong></p>
+     </div>
+    </div>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="http://cdn.staticfile.org/framework7/1.4.0/js/framework7.js"></script>
+    <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/my-app.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript">
+        String.prototype.replaceAll = function(s1,s2) { 
+            return this.replace(new RegExp(s1,"gm"),s2); 
+        }
+        document.getElementById("shareImg").src = "./img/shareImg.jpg"
+        var screenHeight = $(window).height()
+        var screenWidth = $(window).width()
+        var ptHeight = screenHeight - 130;
+
+        var lineFont = [[4, 743], [16, 336], [39, 218]]
+
+        function create(){
+            var fontColor = $(".colorPickChoose").css('background-color');
+            strToImg("textContent", "save_faceImg", "tempCanvas", fontColor, function(){
+                overlay()
+            })
+        }
+
+        $(document).ready(function(){
+            // 禁止滑动
+            document.body.addEventListener('touchmove', function (event) {
+                // 避免出现当前对象是一些固定属性，例如 input-range 之类的，滑动事件也不响应。
+                try{
+                    for(var name in event.target){
+                        event.target[name]
+                    }
+                    event.preventDefault();
+                } catch (e) {
+                    // 
+                }
+            }, false);
+            $(".colorPick").click(function(event){
+                $(".colorPick").attr("class", "colorPick")
+                $(this).addClass("colorPickChoose")
+            })
+            // modal
+            document.getElementById('overlay').onclick = function() {
+                overlay()
+            };
+            document.getElementById("save_faceImg").addEventListener("click", function (event) {
+                try {
+                    event.stopPropagation();
+                    event.cancelBubble = true;
+                } catch (e) {
+                    // 
+                }
+            }, true)
+        });
+
+        function overlay() {
+            var overlay = $('#overlay');
+            var duration = 150;
+            var save_img = document.getElementById("save_faceImg");
+            var save_img_container = document.getElementById("save_img_container");
+            if (overlay.css('visibility') == 'visible') {
+                overlay.fadeTo(duration, 0, function () {
+                    overlay.css({ visibility: "hidden" });
+                });
+            } else {
+                overlay.fadeTo(duration, 1).css({ visibility: "visible" });
+            }
+
+            // Height
+            save_img_container.style.height = save_img.height + "px";
+            save_img_container.style["margin-top"] = (screenHeight - save_img_container.style.height.split("px")[0]) / 3 + "px"
+        }
+    </script>
+  </body>
+</html>
