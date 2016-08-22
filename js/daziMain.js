@@ -43,8 +43,9 @@ function strToImg(strElement, imgElement, canvasElement, fontColor, callback){
         context.fillText(strList[i], 0, (i + 1) * lineFont[fontIndex][1]);
     }
     var save_img = document.getElementById(imgElement)
-    save_img.src = canvas.toDataURL("image/gif")
-    save_img.onload = function(){
-        callback()
-    }
+    save_img.src = canvas.toDataURL("image/jpeg")
+    // save_img.onload = function(){
+    // } // 出了个问题，不知道为啥不执行了
+    callback()
+    context.clearRect(0, 0, canvas.width, canvas.height);
 }
