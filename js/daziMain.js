@@ -36,7 +36,7 @@ function strToImg(strElement, imgElement, canvasElement, fontColor, callback){
     context.fillStyle='#FFFFFF';
     context.fillRect(0,0,canvas.width,canvas.height);
     context.restore()
-    context.drawImage(document.getElementById("QRCode"), 0, 903, 85, 85)
+    context.drawImage(document.getElementById("QRCode"), 0, 818, 170, 170)
     context.fillStyle = fontColor;
     context.font = lineFont[fontIndex][1] + "px Courier New"
     for (var i = 0; i < strList.length; i++) {
