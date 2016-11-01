@@ -6,4 +6,5 @@
 
 Compose png with giant word for wechat.
 
-(效果链接)[http://dazi.feelinging.com/]
+[效果链接](http://dazi.feelinging.com/)
+
